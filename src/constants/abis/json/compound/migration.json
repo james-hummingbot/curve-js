@@ -1,57 +1,57 @@
 [
   {
-    "outputs":[],
-    "inputs":[
+    "outputs": [],
+    "inputs": [
       {
-        "type":"address",
-        "name":"_old"
+        "type": "address",
+        "name": "_old"
       },
       {
-        "type":"address",
-        "name":"_old_token"
+        "type": "address",
+        "name": "_old_token"
       },
       {
-        "type":"address",
-        "name":"_new"
+        "type": "address",
+        "name": "_new"
       },
       {
-        "type":"address",
-        "name":"_new_token"
+        "type": "address",
+        "name": "_new_token"
       },
       {
-        "type":"address[2]",
-        "name":"_coins"
+        "type": "address[2]",
+        "name": "_coins"
       }
     ],
-    "constant":false,
-    "payable":false,
-    "type":"constructor"
+    "constant": false,
+    "payable": false,
+    "type": "constructor"
   },
   {
-    "name":"migrate",
-    "outputs":[],
-    "inputs":[],
-    "constant":false,
-    "payable":false,
-    "type":"function",
-    "gas":"106812"
+    "name": "migrate",
+    "outputs": [],
+    "inputs": [],
+    "constant": false,
+    "payable": false,
+    "type": "function",
+    "gas": "106812"
   },
   {
-    "name":"coins",
-    "outputs":[
+    "name": "coins",
+    "outputs": [
       {
-        "type":"address",
-        "name":"out"
+        "type": "address",
+        "name": "out"
       }
     ],
-    "inputs":[
+    "inputs": [
       {
-        "type":"int128",
-        "name":"arg0"
+        "type": "int128",
+        "name": "arg0"
       }
     ],
     "stateMutability": "view",
-    "type":"function",
-    "gas":"1380"
+    "type": "function",
+    "gas": "1380"
   }
 ]
