@@ -10,6 +10,9 @@ declare function init(providerType: 'JsonRpc' | 'Web3' | 'Infura' | 'Alchemy', p
     network: Networkish;
     apiKey: string;
     privateKey_?: string;
+} | {
+    urlWithApiKey: string;
+    privateKey_?: string;
 }, options?: {
     gasPrice?: number;
     maxFeePerGas?: number;

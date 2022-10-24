@@ -64,6 +64,9 @@ declare class Curve implements ICurve {
         network: Networkish;
         apiKey: string;
         privateKey_?: string;
+    } | {
+        urlWithApiKey: string;
+        privateKey_?: string;
     }, options?: {
         gasPrice?: number;
         maxFeePerGas?: number;

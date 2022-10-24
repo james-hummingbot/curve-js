@@ -272,7 +272,7 @@ class Curve implements ICurve {
 
     async init(
         providerType: 'JsonRpc' | 'Web3' | 'Infura' | 'Alchemy',
-        providerSettings: { url?: string, privateKey?: string } | { externalProvider: ethers.providers.ExternalProvider } | { network: Networkish, apiKey: string, privateKey_?: string },
+        providerSettings: { url?: string, privateKey?: string } | { externalProvider: ethers.providers.ExternalProvider } | { network: Networkish, apiKey: string, privateKey_?: string } | { urlWithApiKey: string, privateKey_?: string },
         options: { gasPrice?: number, maxFeePerGas?: number, maxPriorityFeePerGas?: number, chainId?: number } = {} // gasPrice in Gwei
     ): Promise<void> {
         // @ts-ignore
@@ -321,8 +321,8 @@ class Curve implements ICurve {
             this.signer = this.provider.getSigner();
         // Infura provider
         } else if (providerType.toLowerCase() === 'Infura'.toLowerCase()) {
-            providerSettings = providerSettings as { network: Networkish, apiKey: string, privateKey_?: string };
-            this.provider = new ethers.providers.StaticJsonRpcProvider(providerSettings.network + providerSettings.apiKey);
+            providerSettings = providerSettings as { urlWithApiKey: string, privateKey_?: string };
+            this.provider = new ethers.providers.StaticJsonRpcProvider(providerSettings.urlWithApiKey);
             if (providerSettings.privateKey_) {
                 this.signer = new ethers.Wallet(providerSettings.privateKey_, this.provider);
             } else {

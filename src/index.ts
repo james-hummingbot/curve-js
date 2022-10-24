@@ -45,7 +45,7 @@ import {
 
 async function init (
     providerType: 'JsonRpc' | 'Web3' | 'Infura' | 'Alchemy',
-    providerSettings: { url?: string, privateKey?: string } | { externalProvider: ethers.providers.ExternalProvider } | { network: Networkish, apiKey: string, privateKey_?: string },
+    providerSettings: { url?: string, privateKey?: string } | { externalProvider: ethers.providers.ExternalProvider } | { network: Networkish, apiKey: string, privateKey_?: string } | { urlWithApiKey: string, privateKey_?: string },
     options: { gasPrice?: number, maxFeePerGas?: number, maxPriorityFeePerGas?: number, chainId?: number } = {}
 ): Promise<void> {
     await _curve.init(providerType, providerSettings, options);
