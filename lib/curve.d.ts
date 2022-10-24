@@ -1,36 +1,17 @@
 import { ethers, Contract } from "ethers";
 import { Networkish } from "@ethersproject/networks";
 import { Provider as MulticallProvider, Contract as MulticallContract } from 'ethcall';
-import { PoolDataInterface, DictInterface, ICurve } from "./interfaces";
-export declare let POOLS_DATA: {
-    [index: string]: PoolDataInterface;
+import { IPoolData, IDict, ICurve, INetworkName } from "./interfaces";
+export declare const NATIVE_TOKENS: {
+    [index: number]: {
+        symbol: string;
+        wrappedSymbol: string;
+        address: string;
+        wrappedAddress: string;
+    };
 };
-export declare let LP_TOKENS: string[];
-export declare let GAUGES: string[];
-export declare let BTC_COINS: DictInterface<string>;
-export declare let BTC_COINS_LOWER_CASE: DictInterface<string>;
-export declare let ETH_COINS: DictInterface<string>;
-export declare let ETH_COINS_LOWER_CASE: DictInterface<string>;
-export declare let LINK_COINS: DictInterface<string>;
-export declare let LINK_COINS_LOWER_CASE: DictInterface<string>;
-export declare let EUR_COINS: DictInterface<string>;
-export declare let EUR_COINS_LOWER_CASE: DictInterface<string>;
-export declare let USD_COINS: DictInterface<string>;
-export declare let USD_COINS_LOWER_CASE: DictInterface<string>;
-export declare let COINS: DictInterface<string>;
-export declare let DECIMALS: DictInterface<number>;
-export declare let DECIMALS_LOWER_CASE: DictInterface<number>;
-export declare let ALIASES: {
-    crv: string;
-    minter: string;
-    voting_escrow: string;
-    gauge_controller: string;
-    address_provider: string;
-    router: string;
-    deposit_and_stake: string;
-    factory: string;
-    crypto_factory: string;
-    registry_exchange: string;
+export declare const NETWORK_CONSTANTS: {
+    [index: number]: any;
 };
 declare class Curve implements ICurve {
     provider: ethers.providers.Web3Provider | ethers.providers.JsonRpcProvider;
@@ -57,7 +38,22 @@ declare class Curve implements ICurve {
         maxFeePerGas?: number | ethers.BigNumber;
         maxPriorityFeePerGas?: number | ethers.BigNumber;
     };
-    constants: DictInterface<any>;
+    constants: {
+        NATIVE_TOKEN: {
+            symbol: string;
+            wrappedSymbol: string;
+            address: string;
+            wrappedAddress: string;
+        };
+        NETWORK_NAME: INetworkName;
+        ALIASES: IDict<string>;
+        POOLS_DATA: IDict<IPoolData>;
+        FACTORY_POOLS_DATA: IDict<IPoolData>;
+        CRYPTO_FACTORY_POOLS_DATA: IDict<IPoolData>;
+        COINS: IDict<string>;
+        DECIMALS: IDict<number>;
+        GAUGES: string[];
+    };
     constructor();
     init(providerType: 'JsonRpc' | 'Web3' | 'Infura' | 'Alchemy', providerSettings: {
         url?: string;
@@ -74,6 +70,7 @@ declare class Curve implements ICurve {
         maxPriorityFeePerGas?: number;
         chainId?: number;
     }): Promise<void>;
+    setContract(address: string, abi: any): void;
     fetchFactoryPools(useApi?: boolean): Promise<void>;
     fetchCryptoFactoryPools(useApi?: boolean): Promise<void>;
     setCustomFeeData(customFeeData: {

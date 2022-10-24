@@ -1,18 +1,65 @@
-import { DictInterface } from "../interfaces";
-export declare const implementationABIDictEthereum: DictInterface<any>;
-export declare const implementationABIDictPolygon: DictInterface<any>;
-export declare const implementationBasePoolAddressDictEthereum: DictInterface<any>;
-export declare const implementationBasePoolAddressDictPolygon: DictInterface<any>;
-export declare const basePoolAddressNameDictEthereum: DictInterface<string>;
-export declare const basePoolAddressNameDictPolygon: DictInterface<string>;
-export declare const basePoolAddressCoinsDictEthereum: DictInterface<string[]>;
-export declare const basePoolAddressCoinsDictPolygon: DictInterface<string[]>;
-export declare const basePoolAddressCoinAddressesDictEthereum: DictInterface<string[]>;
-export declare const basePoolAddressCoinAddressesDictPolygon: DictInterface<string[]>;
-export declare const basePoolAddressDecimalsDictEthereum: DictInterface<number[]>;
-export declare const basePoolAddressDecimalsDictPolygon: DictInterface<number[]>;
-export declare const basePoolAddressZapDictEthereum: DictInterface<string>;
-export declare const basePoolAddressZapDictPolygon: DictInterface<string>;
-export declare const blackListPolygon: string[];
-export declare const WETH_ADDRESS = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
-export declare const ETH_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+import { IDict } from "../interfaces";
+export declare const implementationABIDictEthereum: IDict<any>;
+export declare const implementationABIDictPolygon: IDict<any>;
+export declare const implementationABIDictFantom: IDict<any>;
+export declare const implementationABIDictAvalanche: IDict<any>;
+export declare const implementationABIDictArbitrum: IDict<any>;
+export declare const implementationABIDictOptimism: IDict<any>;
+export declare const implementationABIDictXDai: IDict<any>;
+export declare const implementationABIDictMoonbeam: IDict<any>;
+export declare const implementationABIDictKava: IDict<any>;
+export declare const implementationBasePoolIdDictEthereum: IDict<string>;
+export declare const implementationBasePoolIdDictPolygon: IDict<string>;
+export declare const implementationBasePoolIdDictFantom: IDict<string>;
+export declare const implementationBasePoolIdDictAvalanche: IDict<string>;
+export declare const implementationBasePoolIdDictArbitrum: IDict<string>;
+export declare const implementationBasePoolIdDictOptimism: IDict<string>;
+export declare const implementationBasePoolIdDictXDai: IDict<string>;
+export declare const implementationBasePoolIdDictMoonbeam: IDict<string>;
+export declare const implementationBasePoolIdDictKava: IDict<string>;
+export declare const basePoolIdZapDictEthereum: IDict<{
+    address: string;
+    ABI: any;
+}>;
+export declare const basePoolIdZapDictPolygon: IDict<{
+    address: string;
+    ABI: any;
+}>;
+export declare const basePoolIdZapDictFantom: IDict<{
+    address: string;
+    ABI: any;
+}>;
+export declare const basePoolIdZapDictAvalanche: IDict<{
+    address: string;
+    ABI: any;
+}>;
+export declare const basePoolIdZapDictArbitrum: IDict<{
+    address: string;
+    ABI: any;
+}>;
+export declare const basePoolIdZapDictOptimism: IDict<{
+    address: string;
+    ABI: any;
+}>;
+export declare const basePoolIdZapDictXDai: IDict<{
+    address: string;
+    ABI: any;
+}>;
+export declare const basePoolIdZapDictMoonbeam: IDict<{
+    address: string;
+    ABI: any;
+}>;
+export declare const basePoolIdZapDictKava: IDict<{
+    address: string;
+    ABI: any;
+}>;
+export declare const FACTORY_CONSTANTS: {
+    [index: number]: {
+        implementationABIDict: IDict<any>;
+        implementationBasePoolIdDict: IDict<string>;
+        basePoolIdZapDict: IDict<{
+            address: string;
+            ABI: any;
+        }>;
+    };
+};

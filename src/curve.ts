@@ -4,91 +4,222 @@ import { Provider as MulticallProvider, Contract as MulticallContract } from 'et
 import { getFactoryPoolData } from "./factory/factory";
 import { getFactoryPoolsDataFromApi } from "./factory/factory-api";
 import { getCryptoFactoryPoolData } from "./factory/factory-crypto";
-import {PoolDataInterface, DictInterface, ICurve} from "./interfaces";
-import ERC20Abi from './constants/abis/json/ERC20.json';
-import cERC20Abi from './constants/abis/json/cERC20.json';
-import yERC20Abi from './constants/abis/json/yERC20.json';
-import minterABI from './constants/abis/json/minter.json';
-import votingEscrowABI from './constants/abis/json/votingescrow.json';
-import addressProviderABI from './constants/abis/json/address_provider.json';
-import gaugeControllerABI from './constants/abis/json/gaugecontroller.json';
-import routerABI from './constants/abis/json/router.json';
-import depositAndStakeABI from './constants/abis/json/deposit_and_stake.json';
-import registryExchangeABI from './constants/abis/json/registry_exchange.json';
-import streamerABI from './constants/abis/json/streamer.json';
-import factoryABI from './constants/abis/json/factory.json';
-import cryptoFactoryABI from './constants/abis/json/factory-crypto.json';
-import { POOLS_DATA_ETHEREUM } from './constants/abis/abis-ethereum';
-import { POOLS_DATA_POLYGON } from './constants/abis/abis-polygon';
+import { IPoolData, IDict, ICurve, INetworkName } from "./interfaces";
+import ERC20Abi from './constants/abis/ERC20.json';
+import cERC20Abi from './constants/abis/cERC20.json';
+import yERC20Abi from './constants/abis/yERC20.json';
+import minterABI from './constants/abis/minter.json';
+import minterChildABI from './constants/abis/minter_child.json';
+import votingEscrowABI from './constants/abis/votingescrow.json';
+import feeDistributorABI from './constants/abis/fee_distributor.json';
+import addressProviderABI from './constants/abis/address_provider.json';
+import gaugeControllerABI from './constants/abis/gaugecontroller.json';
+import routerABI from './constants/abis/router.json';
+import depositAndStakeABI from './constants/abis/deposit_and_stake.json';
+import registryExchangeABI from './constants/abis/registry_exchange.json';
+import streamerABI from './constants/abis/streamer.json';
+import factoryABI from './constants/abis/factory.json';
+import cryptoFactoryABI from './constants/abis/factory-crypto.json';
 import {
-    BTC_COINS_ETHEREUM,
-    BTC_COINS_LOWER_CASE_ETHEREUM,
-    ETH_COINS_ETHEREUM,
-    ETH_COINS_LOWER_CASE_ETHEREUM,
-    LINK_COINS_ETHEREUM,
-    LINK_COINS_LOWER_CASE_ETHEREUM,
-    EUR_COINS_ETHEREUM,
-    EUR_COINS_LOWER_CASE_ETHEREUM,
-    USD_COINS_ETHEREUM,
-    USD_COINS_LOWER_CASE_ETHEREUM,
-    COINS_ETHEREUM,
-    DECIMALS_ETHEREUM,
-    DECIMALS_LOWER_CASE_ETHEREUM,
-    cTokensEthereum,
-    ycTokensEthereum,
-    yTokensEthereum,
-    aTokensEthereum,
-} from "./constants/coins-ethereum";
+    POOLS_DATA_ETHEREUM,
+    POOLS_DATA_POLYGON,
+    POOLS_DATA_FANTOM,
+    POOLS_DATA_AVALANCHE,
+    POOLS_DATA_ARBITRUM,
+    POOLS_DATA_OPTIMISM,
+    POOLS_DATA_XDAI,
+    POOLS_DATA_MOONBEAM,
+    POOLS_DATA_AURORA,
+    POOLS_DATA_KAVA,
+} from './constants/pools';
 import {
-    BTC_COINS_POLYGON,
-    BTC_COINS_LOWER_CASE_POLYGON,
-    ETH_COINS_POLYGON,
-    ETH_COINS_LOWER_CASE_POLYGON,
-    LINK_COINS_POLYGON,
-    LINK_COINS_LOWER_CASE_POLYGON,
-    EUR_COINS_POLYGON,
-    EUR_COINS_LOWER_CASE_POLYGON,
-    USD_COINS_POLYGON,
-    USD_COINS_LOWER_CASE_POLYGON,
-    COINS_POLYGON,
-    DECIMALS_POLYGON,
-    DECIMALS_LOWER_CASE_POLYGON,
-    cTokensPolygon,
-    ycTokensPolygon,
-    yTokensPolygon,
-    aTokensPolygon,
-} from "./constants/coins-polygon";
-import { ALIASES_ETHEREUM, ALIASES_POLYGON } from "./constants/aliases";
+    ALIASES_ETHEREUM,
+    ALIASES_OPTIMISM,
+    ALIASES_POLYGON,
+    ALIASES_FANTOM,
+    ALIASES_AVALANCHE,
+    ALIASES_ARBITRUM,
+    ALIASES_XDAI,
+    ALIASES_MOONBEAM,
+    ALIASES_AURORA,
+    ALIASES_KAVA,
+} from "./constants/aliases";
+import { COINS_ETHEREUM, cTokensEthereum, yTokensEthereum, ycTokensEthereum, aTokensEthereum } from "./constants/coins/ethereum";
+import { COINS_OPTIMISM, cTokensOptimism, yTokensOptimism, ycTokensOptimism, aTokensOptimism } from "./constants/coins/optimism";
+import { COINS_POLYGON, cTokensPolygon,  yTokensPolygon, ycTokensPolygon, aTokensPolygon } from "./constants/coins/polygon";
+import { COINS_FANTOM, cTokensFantom,  yTokensFantom, ycTokensFantom, aTokensFantom } from "./constants/coins/fantom";
+import { COINS_AVALANCHE, cTokensAvalanche,  yTokensAvalanche, ycTokensAvalanche, aTokensAvalanche } from "./constants/coins/avalanche";
+import { COINS_ARBITRUM, cTokensArbitrum,  yTokensArbitrum, ycTokensArbitrum, aTokensArbitrum } from "./constants/coins/arbitrum";
+import { COINS_XDAI, cTokensXDai,  yTokensXDai, ycTokensXDai, aTokensXDai } from "./constants/coins/xdai";
+import { COINS_MOONBEAM, cTokensMoonbeam,  yTokensMoonbeam, ycTokensMoonbeam, aTokensMoonbeam } from "./constants/coins/moonbeam";
+import { COINS_AURORA, cTokensAurora,  yTokensAurora, ycTokensAurora, aTokensAurora } from "./constants/coins/aurora";
+import { COINS_KAVA, cTokensKava,  yTokensKava, ycTokensKava, aTokensKava } from "./constants/coins/kava";
+import { lowerCasePoolDataAddresses, extractDecimals, extractGauges } from "./constants/utils";
 
-export let POOLS_DATA: { [index: string]: PoolDataInterface };
-export let LP_TOKENS: string[];
-export let GAUGES: string[];
+export const NATIVE_TOKENS: { [index: number]: { symbol: string, wrappedSymbol: string, address: string, wrappedAddress: string }} = {
+    1: {  // ETH
+        symbol: 'ETH',
+        wrappedSymbol: 'WETH',
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        wrappedAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'.toLowerCase(),
+    },
+    10: { // OPTIMISM
+        symbol: 'ETH',
+        wrappedSymbol: 'WETH',
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        wrappedAddress: '0x4200000000000000000000000000000000000006'.toLowerCase(),
+    },
+    100: { // XDAI
+        symbol: 'XDAi',
+        wrappedSymbol: 'WXDAI',
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        wrappedAddress: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'.toLowerCase(),
+    },
+    137: {  // POLYGON
+        symbol: 'MATIC',
+        wrappedSymbol: 'WMATIC',
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        wrappedAddress: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'.toLowerCase(),
+    },
+    250: {  // FANTOM
+        symbol: 'FTM',
+        wrappedSymbol: 'WFTM',
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        wrappedAddress: '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83'.toLowerCase(),
+    },
+    1284: {  // MOONBEAM
+        symbol: 'GLMR',
+        wrappedSymbol: 'WGLMR',
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        wrappedAddress: '0xAcc15dC74880C9944775448304B263D191c6077F'.toLowerCase(),
+    },
+    2222: {  // KAVA
+        symbol: 'KAVA',
+        wrappedSymbol: 'WKAVA',
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        wrappedAddress: '0xc86c7C0eFbd6A49B35E8714C5f59D99De09A225b'.toLowerCase(),
+    },
+    43114: {  // AVALANCHE
+        symbol: 'AVAX',
+        wrappedSymbol: 'WAVAX',
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        wrappedAddress: '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7'.toLowerCase(),
+    },
+    42161: {  // ARBITRUM
+        symbol: 'ETH',
+        wrappedSymbol: 'WETH',
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        wrappedAddress: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1'.toLowerCase(),
+    },
+    1313161554: {  // AURORA
+        symbol: 'ETH',
+        wrappedSymbol: 'WETH',
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        wrappedAddress: '0xC9BdeEd33CD01541e1eeD10f90519d2C06Fe3feB'.toLowerCase(),
+    },
+}
 
-export let BTC_COINS: DictInterface<string>;
-export let BTC_COINS_LOWER_CASE: DictInterface<string>;
-export let ETH_COINS: DictInterface<string>;
-export let ETH_COINS_LOWER_CASE: DictInterface<string>;
-export let LINK_COINS: DictInterface<string>;
-export let LINK_COINS_LOWER_CASE: DictInterface<string>;
-export let EUR_COINS: DictInterface<string>;
-export let EUR_COINS_LOWER_CASE: DictInterface<string>;
-export let USD_COINS: DictInterface<string>;
-export let USD_COINS_LOWER_CASE: DictInterface<string>;
-export let COINS: DictInterface<string>;
-export let DECIMALS: DictInterface<number>;
-export let DECIMALS_LOWER_CASE: DictInterface<number>;
-
-export let ALIASES = {
-    "crv": "0xD533a949740bb3306d119CC777fa900bA034cd52",
-    "minter": "0xd061D61a4d941c39E5453435B6345Dc261C2fcE0",
-    "voting_escrow": "0x5f3b5DfEb7B28CDbD7FAba78963EE202a494e2A2",
-    "gauge_controller": "0x2F50D538606Fa9EDD2B11E2446BEb18C9D5846bB",
-    "address_provider": "0x0000000022d53366457f9d5e68ec105046fc4383",
-    "router": "0xfA9a30350048B2BF66865ee20363067c66f67e58",
-    "deposit_and_stake": "0x271fbE8aB7f1fB262f81C77Ea5303F03DA9d3d6A",
-    "factory": '0xb9fc157394af804a3578134a6585c0dc9cc990d4',
-    "crypto_factory": '0xF18056Bbd320E96A48e3Fbf8bC061322531aac99',
-    "registry_exchange": "",
+export const NETWORK_CONSTANTS: { [index: number]: any } = {
+    1: {
+        NAME: 'ethereum',
+        ALIASES: ALIASES_ETHEREUM,
+        POOLS_DATA: POOLS_DATA_ETHEREUM,
+        COINS: COINS_ETHEREUM,
+        cTokens: cTokensEthereum,
+        yTokens: yTokensEthereum,
+        ycTokens: ycTokensEthereum,
+        aTokens: aTokensEthereum,
+    },
+    10: {
+        NAME: 'optimism',
+        ALIASES: ALIASES_OPTIMISM,
+        POOLS_DATA: POOLS_DATA_OPTIMISM,
+        COINS: COINS_OPTIMISM,
+        cTokens: cTokensOptimism,
+        yTokens: yTokensOptimism,
+        ycTokens: ycTokensOptimism,
+        aTokens: aTokensOptimism,
+    },
+    100: {
+        NAME: 'xdai',
+        ALIASES: ALIASES_XDAI,
+        POOLS_DATA: POOLS_DATA_XDAI,
+        COINS: COINS_XDAI,
+        cTokens: cTokensXDai,
+        yTokens: yTokensXDai,
+        ycTokens: ycTokensXDai,
+        aTokens: aTokensXDai,
+    },
+    137: {
+        NAME: 'polygon',
+        ALIASES: ALIASES_POLYGON,
+        POOLS_DATA: POOLS_DATA_POLYGON,
+        COINS: COINS_POLYGON,
+        cTokens: cTokensPolygon,
+        yTokens: yTokensPolygon,
+        ycTokens: ycTokensPolygon,
+        aTokens: aTokensPolygon,
+    },
+    250: {
+        NAME: 'fantom',
+        ALIASES: ALIASES_FANTOM,
+        POOLS_DATA: POOLS_DATA_FANTOM,
+        COINS: COINS_FANTOM,
+        cTokens: cTokensFantom,
+        yTokens: yTokensFantom,
+        ycTokens: ycTokensFantom,
+        aTokens: aTokensFantom,
+    },
+    1284: {
+        NAME: 'moonbeam',
+        ALIASES: ALIASES_MOONBEAM,
+        POOLS_DATA: POOLS_DATA_MOONBEAM,
+        COINS: COINS_MOONBEAM,
+        cTokens: cTokensMoonbeam,
+        yTokens: yTokensMoonbeam,
+        ycTokens: ycTokensMoonbeam,
+        aTokens: aTokensMoonbeam,
+    },
+    2222: {
+        NAME: 'kava',
+        ALIASES: ALIASES_KAVA,
+        POOLS_DATA: POOLS_DATA_KAVA,
+        COINS: COINS_KAVA,
+        cTokens: cTokensKava,
+        yTokens: yTokensKava,
+        ycTokens: ycTokensKava,
+        aTokens: aTokensKava,
+    },
+    43114: {
+        NAME: 'avalanche',
+        ALIASES: ALIASES_AVALANCHE,
+        POOLS_DATA: POOLS_DATA_AVALANCHE,
+        COINS: COINS_AVALANCHE,
+        cTokens: cTokensAvalanche,
+        yTokens: yTokensAvalanche,
+        ycTokens: ycTokensAvalanche,
+        aTokens: aTokensAvalanche,
+    },
+    42161: {
+        NAME: 'arbitrum',
+        ALIASES: ALIASES_ARBITRUM,
+        POOLS_DATA: POOLS_DATA_ARBITRUM,
+        COINS: COINS_ARBITRUM,
+        cTokens: cTokensArbitrum,
+        yTokens: yTokensArbitrum,
+        ycTokens: ycTokensArbitrum,
+        aTokens: aTokensArbitrum,
+    },
+    1313161554: {
+        NAME: 'aurora',
+        ALIASES: ALIASES_AURORA,
+        POOLS_DATA: POOLS_DATA_AURORA,
+        COINS: COINS_AURORA,
+        cTokens: cTokensAurora,
+        yTokens: yTokensAurora,
+        ycTokens: ycTokensAurora,
+        aTokens: aTokensAurora,
+    },
 }
 
 class Curve implements ICurve {
@@ -101,7 +232,17 @@ class Curve implements ICurve {
     feeData: { gasPrice?: number, maxFeePerGas?: number, maxPriorityFeePerGas?: number };
     constantOptions: { gasLimit: number };
     options: { gasPrice?: number | ethers.BigNumber, maxFeePerGas?: number | ethers.BigNumber, maxPriorityFeePerGas?: number | ethers.BigNumber };
-    constants: DictInterface<any>;
+    constants: {
+        NATIVE_TOKEN: { symbol: string, wrappedSymbol: string, address: string, wrappedAddress: string },
+        NETWORK_NAME: INetworkName,
+        ALIASES: IDict<string>,
+        POOLS_DATA: IDict<IPoolData>,
+        FACTORY_POOLS_DATA: IDict<IPoolData>,
+        CRYPTO_FACTORY_POOLS_DATA: IDict<IPoolData>,
+        COINS: IDict<string>,
+        DECIMALS: IDict<number>,
+        GAUGES: string[],
+    };
 
     constructor() {
         // @ts-ignore
@@ -116,7 +257,17 @@ class Curve implements ICurve {
         this.feeData = {}
         this.constantOptions = { gasLimit: 12000000 }
         this.options = {};
-        this.constants ={};
+        this.constants ={
+            NATIVE_TOKEN: NATIVE_TOKENS[1],
+            NETWORK_NAME: 'ethereum',
+            ALIASES: {},
+            POOLS_DATA: {},
+            FACTORY_POOLS_DATA: {},
+            CRYPTO_FACTORY_POOLS_DATA: {},
+            COINS: {},
+            DECIMALS: {},
+            GAUGES: [],
+        };
     }
 
     async init(
@@ -124,7 +275,29 @@ class Curve implements ICurve {
         providerSettings: { url?: string, privateKey?: string } | { externalProvider: ethers.providers.ExternalProvider } | { network: Networkish, apiKey: string, privateKey_?: string },
         options: { gasPrice?: number, maxFeePerGas?: number, maxPriorityFeePerGas?: number, chainId?: number } = {} // gasPrice in Gwei
     ): Promise<void> {
+        // @ts-ignore
+        this.provider = null;
+        // @ts-ignore
+        this.signer = null;
+        this.signerAddress = '';
+        this.chainId = 0;
+        // @ts-ignore
+        this.multicallProvider = null;
         this.contracts = {};
+        this.feeData = {}
+        this.constantOptions = { gasLimit: 12000000 }
+        this.options = {};
+        this.constants = {
+            NATIVE_TOKEN: NATIVE_TOKENS[1],
+            NETWORK_NAME: 'ethereum',
+            ALIASES: {},
+            POOLS_DATA: {},
+            FACTORY_POOLS_DATA: {},
+            CRYPTO_FACTORY_POOLS_DATA: {},
+            COINS: {},
+            DECIMALS: {},
+            GAUGES: [],
+        };
 
         // JsonRpc provider
         if (providerType.toLowerCase() === 'JsonRpc'.toLowerCase()) {
@@ -138,7 +311,7 @@ class Curve implements ICurve {
 
             if (providerSettings.privateKey) {
                 this.signer = new ethers.Wallet(providerSettings.privateKey, this.provider);
-            } else {
+            } else if (!providerSettings.url?.startsWith("https://rpc.gnosischain.com")) {
                 this.signer = this.provider.getSigner();
             }
         // Web3 provider
@@ -167,71 +340,34 @@ class Curve implements ICurve {
             throw Error('Wrong providerType');
         }
 
-        let cTokens, yTokens, ycTokens, aTokens;
-
         const network = this.provider.network || await this.provider._networkPromise;
         console.log("CURVE-JS IS CONNECTED TO NETWORK:", network);
+        this.chainId = network.chainId === 1337 ? 1 : network.chainId;
 
-        this.chainId = network.chainId;
-
-        if (network.chainId === 1 || network.chainId === 1337) {
-            cTokens = cTokensEthereum;
-            yTokens = yTokensEthereum;
-            ycTokens = ycTokensEthereum;
-            aTokens = aTokensEthereum;
-
-            ALIASES = ALIASES_ETHEREUM;
-            POOLS_DATA = POOLS_DATA_ETHEREUM;
-
-            BTC_COINS = BTC_COINS_ETHEREUM;
-            BTC_COINS_LOWER_CASE = BTC_COINS_LOWER_CASE_ETHEREUM;
-            ETH_COINS = ETH_COINS_ETHEREUM;
-            ETH_COINS_LOWER_CASE = ETH_COINS_LOWER_CASE_ETHEREUM;
-            LINK_COINS = LINK_COINS_ETHEREUM;
-            LINK_COINS_LOWER_CASE = LINK_COINS_LOWER_CASE_ETHEREUM;
-            EUR_COINS = EUR_COINS_ETHEREUM;
-            EUR_COINS_LOWER_CASE = EUR_COINS_LOWER_CASE_ETHEREUM;
-            USD_COINS = USD_COINS_ETHEREUM;
-            USD_COINS_LOWER_CASE = USD_COINS_LOWER_CASE_ETHEREUM;
-            COINS = COINS_ETHEREUM;
-            DECIMALS = DECIMALS_ETHEREUM;
-            DECIMALS_LOWER_CASE = DECIMALS_LOWER_CASE_ETHEREUM;
-        } else if (network.chainId === 137) {
-            cTokens = cTokensPolygon;
-            yTokens = yTokensPolygon;
-            ycTokens = ycTokensPolygon;
-            aTokens = aTokensPolygon;
-
-            ALIASES = ALIASES_POLYGON;
-            POOLS_DATA = POOLS_DATA_POLYGON;
-
-            BTC_COINS = BTC_COINS_POLYGON;
-            BTC_COINS_LOWER_CASE = BTC_COINS_LOWER_CASE_POLYGON;
-            ETH_COINS = ETH_COINS_POLYGON;
-            ETH_COINS_LOWER_CASE = ETH_COINS_LOWER_CASE_POLYGON;
-            LINK_COINS = LINK_COINS_POLYGON;
-            LINK_COINS_LOWER_CASE = LINK_COINS_LOWER_CASE_POLYGON;
-            EUR_COINS = EUR_COINS_POLYGON;
-            EUR_COINS_LOWER_CASE = EUR_COINS_LOWER_CASE_POLYGON;
-            USD_COINS = USD_COINS_POLYGON;
-            USD_COINS_LOWER_CASE = USD_COINS_LOWER_CASE_POLYGON;
-            COINS = COINS_POLYGON;
-            DECIMALS = DECIMALS_POLYGON;
-            DECIMALS_LOWER_CASE = DECIMALS_LOWER_CASE_POLYGON;
-        } else {
-            throw Error(`Network with chainId ${this.provider.network.chainId} is not supported`)
-        }
-
-        LP_TOKENS = Object.values(POOLS_DATA).map((data) => data.token_address.toLowerCase());
-        GAUGES = Object.values(POOLS_DATA).map((data) => data.gauge_address.toLowerCase());
-
+        this.constants.NATIVE_TOKEN = NATIVE_TOKENS[this.chainId];
+        this.constants.NETWORK_NAME = NETWORK_CONSTANTS[this.chainId].NAME;
+        this.constants.ALIASES = NETWORK_CONSTANTS[this.chainId].ALIASES;
+        this.constants.POOLS_DATA = NETWORK_CONSTANTS[this.chainId].POOLS_DATA;
+        this.constants.COINS = NETWORK_CONSTANTS[this.chainId].COINS;
+        this.constants.DECIMALS = extractDecimals(this.constants.POOLS_DATA);
+        this.constants.GAUGES = extractGauges(this.constants.POOLS_DATA);
+        const [cTokens, yTokens, ycTokens, aTokens] = [
+            NETWORK_CONSTANTS[this.chainId].cTokens,
+            NETWORK_CONSTANTS[this.chainId].yTokens,
+            NETWORK_CONSTANTS[this.chainId].ycTokens,
+            NETWORK_CONSTANTS[this.chainId].aTokens,
+        ];
         const customAbiTokens = [...cTokens, ...yTokens, ...ycTokens, ...aTokens];
 
         this.multicallProvider = new MulticallProvider();
         await this.multicallProvider.init(this.provider);
 
         if (this.signer) {
-            this.signerAddress = await this.signer.getAddress();
+            try {
+                this.signerAddress = await this.signer.getAddress();
+            } catch (err) {
+                this.signer = null;
+            }
         } else {
             this.signerAddress = '';
         }
@@ -239,13 +375,8 @@ class Curve implements ICurve {
         this.feeData = { gasPrice: options.gasPrice, maxFeePerGas: options.maxFeePerGas, maxPriorityFeePerGas: options.maxPriorityFeePerGas };
         await this.updateFeeData();
 
-        // TODO delete toLowerCase()
-        for (const pool of Object.values(POOLS_DATA)) {
+        for (const pool of Object.values(this.constants.POOLS_DATA)) {
             this.contracts[pool.swap_address] = {
-                contract: new Contract(pool.swap_address, pool.swap_abi, this.signer || this.provider),
-                multicallContract: new MulticallContract(pool.swap_address, pool.swap_abi),
-            };
-            this.contracts[pool.swap_address.toLowerCase()] = {
                 contract: new Contract(pool.swap_address, pool.swap_abi, this.signer || this.provider),
                 multicallContract: new MulticallContract(pool.swap_address, pool.swap_abi),
             };
@@ -255,27 +386,17 @@ class Curve implements ICurve {
                     contract: new Contract(pool.token_address, ERC20Abi, this.signer || this.provider),
                     multicallContract: new MulticallContract(pool.token_address, ERC20Abi),
                 }
-                this.contracts[pool.token_address.toLowerCase()] = {
-                    contract: new Contract(pool.token_address, ERC20Abi, this.signer || this.provider),
-                    multicallContract: new MulticallContract(pool.token_address, ERC20Abi),
+            }
+
+            if (pool.gauge_address !== ethers.constants.AddressZero) {
+                this.contracts[pool.gauge_address] = {
+                    contract: new Contract(pool.gauge_address, pool.gauge_abi, this.signer || this.provider),
+                    multicallContract: new MulticallContract(pool.gauge_address, pool.gauge_abi),
                 }
             }
 
-            this.contracts[pool.gauge_address] = {
-                contract: new Contract(pool.gauge_address, pool.gauge_abi, this.signer || this.provider),
-                multicallContract: new MulticallContract(pool.gauge_address, pool.gauge_abi),
-            }
-            this.contracts[pool.gauge_address.toLowerCase()] = {
-                contract: new Contract(pool.gauge_address, pool.gauge_abi, this.signer || this.provider),
-                multicallContract: new MulticallContract(pool.gauge_address, pool.gauge_abi),
-            }
-
-            if (pool.deposit_address && this.contracts[pool.deposit_address] === undefined) {
+            if (pool.deposit_address && !this.contracts[pool.deposit_address]) {
                 this.contracts[pool.deposit_address] = {
-                    contract: new Contract(pool.deposit_address, pool.deposit_abi, this.signer || this.provider),
-                    multicallContract: new MulticallContract(pool.deposit_address, pool.deposit_abi),
-                }
-                this.contracts[pool.deposit_address.toLowerCase()] = {
                     contract: new Contract(pool.deposit_address, pool.deposit_abi, this.signer || this.provider),
                     multicallContract: new MulticallContract(pool.deposit_address, pool.deposit_abi),
                 }
@@ -286,33 +407,22 @@ class Curve implements ICurve {
                     contract: new Contract(coinAddr, ERC20Abi, this.signer || this.provider),
                     multicallContract: new MulticallContract(coinAddr, ERC20Abi),
                 }
-                this.contracts[coinAddr.toLowerCase()] = {
-                    contract: new Contract(coinAddr, ERC20Abi, this.signer || this.provider),
-                    multicallContract: new MulticallContract(coinAddr, ERC20Abi),
-                }
             }
 
-            for (const coinAddr of pool.coin_addresses) {
+            for (const coinAddr of pool.wrapped_coin_addresses) {
                 if (customAbiTokens.includes(coinAddr)) continue;
+                if (coinAddr in this.contracts) continue;
 
                 this.contracts[coinAddr] = {
-                    contract: new Contract(coinAddr, ERC20Abi, this.signer || this.provider),
-                    multicallContract: new MulticallContract(coinAddr, ERC20Abi),
-                }
-                this.contracts[coinAddr.toLowerCase()] = {
                     contract: new Contract(coinAddr, ERC20Abi, this.signer || this.provider),
                     multicallContract: new MulticallContract(coinAddr, ERC20Abi),
                 }
             }
 
             // TODO add all coins
-            for (const coinAddr of pool.coin_addresses) {
+            for (const coinAddr of pool.wrapped_coin_addresses) {
                 if (cTokens.includes(coinAddr)) {
                     this.contracts[coinAddr] = {
-                        contract: new Contract(coinAddr, cERC20Abi, this.signer || this.provider),
-                        multicallContract: new MulticallContract(coinAddr, cERC20Abi),
-                    }
-                    this.contracts[coinAddr.toLowerCase()] = {
                         contract: new Contract(coinAddr, cERC20Abi, this.signer || this.provider),
                         multicallContract: new MulticallContract(coinAddr, cERC20Abi),
                     }
@@ -323,18 +433,10 @@ class Curve implements ICurve {
                         contract: new Contract(coinAddr, ERC20Abi, this.signer || this.provider),
                         multicallContract: new MulticallContract(coinAddr, ERC20Abi),
                     }
-                    this.contracts[coinAddr.toLowerCase()] = {
-                        contract: new Contract(coinAddr, ERC20Abi, this.signer || this.provider),
-                        multicallContract: new MulticallContract(coinAddr, ERC20Abi),
-                    }
                 }
 
                 if (yTokens.includes(coinAddr) || ycTokens.includes(coinAddr)) {
                     this.contracts[coinAddr] = {
-                        contract: new Contract(coinAddr, yERC20Abi, this.signer || this.provider),
-                        multicallContract: new MulticallContract(coinAddr, yERC20Abi),
-                    }
-                    this.contracts[coinAddr.toLowerCase()] = {
                         contract: new Contract(coinAddr, yERC20Abi, this.signer || this.provider),
                         multicallContract: new MulticallContract(coinAddr, yERC20Abi),
                     }
@@ -346,144 +448,143 @@ class Curve implements ICurve {
                     contract: new Contract(pool.reward_contract, streamerABI, this.signer || this.provider),
                     multicallContract: new MulticallContract(pool.reward_contract, streamerABI),
                 }
-                this.contracts[pool.reward_contract.toLowerCase()] = {
-                    contract: new Contract(pool.reward_contract, streamerABI, this.signer || this.provider),
-                    multicallContract: new MulticallContract(pool.reward_contract, streamerABI),
-                }
             }
 
-            for (const rewardTokenAddr of pool.reward_tokens || []) {
-                this.contracts[rewardTokenAddr] = {
-                    contract: new Contract(rewardTokenAddr, ERC20Abi, this.signer || this.provider),
-                    multicallContract: new MulticallContract(rewardTokenAddr, ERC20Abi),
-                }
-                this.contracts[rewardTokenAddr.toLowerCase()] = {
-                    contract: new Contract(rewardTokenAddr, ERC20Abi, this.signer || this.provider),
-                    multicallContract: new MulticallContract(rewardTokenAddr, ERC20Abi),
+            if (pool.sCurveRewards_address) {
+                this.contracts[pool.sCurveRewards_address] = {
+                    contract: new Contract(pool.sCurveRewards_address, pool.sCurveRewards_abi, this.signer || this.provider),
+                    multicallContract: new MulticallContract(pool.sCurveRewards_address, pool.sCurveRewards_abi),
                 }
             }
         }
 
-        this.contracts[ALIASES.crv] = {
-            contract: new Contract(ALIASES.crv, ERC20Abi, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.crv, ERC20Abi),
+        this.contracts[this.constants.ALIASES.crv] = {
+            contract: new Contract(this.constants.ALIASES.crv, ERC20Abi, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.crv, ERC20Abi),
         };
-        this.contracts[ALIASES.crv.toLowerCase()] = {
-            contract: new Contract(ALIASES.crv, ERC20Abi, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.crv, ERC20Abi),
+        this.contracts[this.constants.ALIASES.crv.toLowerCase()] = {
+            contract: new Contract(this.constants.ALIASES.crv, ERC20Abi, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.crv, ERC20Abi),
+        };
+        this.constants.DECIMALS[this.constants.ALIASES.crv] = 18;
+
+        const _minterABI = this.chainId === 1 ? minterABI : minterChildABI
+        this.contracts[this.constants.ALIASES.minter] = {
+            contract: new Contract(this.constants.ALIASES.minter, _minterABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.minter, _minterABI),
+        };
+        this.contracts[this.constants.ALIASES.minter.toLowerCase()] = {
+            contract: new Contract(this.constants.ALIASES.minter, _minterABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.minter, _minterABI),
         };
 
-        this.contracts[ALIASES.minter] = {
-            contract: new Contract(ALIASES.minter, minterABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.minter, minterABI),
+        this.contracts[this.constants.ALIASES.voting_escrow] = {
+            contract: new Contract(this.constants.ALIASES.voting_escrow, votingEscrowABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.voting_escrow, votingEscrowABI),
         };
-        this.contracts[ALIASES.minter.toLowerCase()] = {
-            contract: new Contract(ALIASES.minter, minterABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.minter, minterABI),
-        };
-
-        this.contracts[ALIASES.voting_escrow] = {
-            contract: new Contract(ALIASES.voting_escrow, votingEscrowABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.voting_escrow, votingEscrowABI),
-        };
-        this.contracts[ALIASES.voting_escrow.toLowerCase()] = {
-            contract: new Contract(ALIASES.voting_escrow, votingEscrowABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.voting_escrow, votingEscrowABI),
+        this.contracts[this.constants.ALIASES.voting_escrow.toLowerCase()] = {
+            contract: new Contract(this.constants.ALIASES.voting_escrow, votingEscrowABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.voting_escrow, votingEscrowABI),
         };
 
-        this.contracts[ALIASES.address_provider] = {
-            contract: new Contract(ALIASES.address_provider, addressProviderABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.address_provider, addressProviderABI),
+        this.setContract(this.constants.ALIASES.fee_distributor, feeDistributorABI);
+
+        this.contracts[this.constants.ALIASES.address_provider] = {
+            contract: new Contract(this.constants.ALIASES.address_provider, addressProviderABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.address_provider, addressProviderABI),
         };
-        this.contracts[ALIASES.address_provider.toLowerCase()] = {
-            contract: new Contract(ALIASES.address_provider, addressProviderABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.address_provider, addressProviderABI),
+        this.contracts[this.constants.ALIASES.address_provider.toLowerCase()] = {
+            contract: new Contract(this.constants.ALIASES.address_provider, addressProviderABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.address_provider, addressProviderABI),
         };
 
-        const addressProviderContract = this.contracts[ALIASES.address_provider].contract;
-        ALIASES.registry_exchange = await addressProviderContract.get_address(2, this.constantOptions);
+        const addressProviderContract = this.contracts[this.constants.ALIASES.address_provider].contract;
+        this.constants.ALIASES.registry_exchange = await addressProviderContract.get_address(2, this.constantOptions);
 
-        this.contracts[ALIASES.registry_exchange] = {
-            contract: new Contract(ALIASES.registry_exchange, registryExchangeABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.registry_exchange, registryExchangeABI),
+        this.contracts[this.constants.ALIASES.registry_exchange] = {
+            contract: new Contract(this.constants.ALIASES.registry_exchange, registryExchangeABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.registry_exchange, registryExchangeABI),
         };
-        this.contracts[ALIASES.registry_exchange.toLowerCase()] = {
-            contract: new Contract(ALIASES.registry_exchange, registryExchangeABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.registry_exchange, registryExchangeABI),
-        };
-
-        this.contracts[ALIASES.gauge_controller] = {
-            contract: new Contract(ALIASES.gauge_controller, gaugeControllerABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.gauge_controller, gaugeControllerABI),
-        };
-        this.contracts[ALIASES.gauge_controller.toLowerCase()] = {
-            contract: new Contract(ALIASES.gauge_controller, gaugeControllerABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.gauge_controller, gaugeControllerABI),
+        this.contracts[this.constants.ALIASES.registry_exchange.toLowerCase()] = {
+            contract: new Contract(this.constants.ALIASES.registry_exchange, registryExchangeABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.registry_exchange, registryExchangeABI),
         };
 
-        this.contracts[ALIASES.router] = {
-            contract: new Contract(ALIASES.router, routerABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.router, routerABI),
+        this.contracts[this.constants.ALIASES.gauge_controller] = {
+            contract: new Contract(this.constants.ALIASES.gauge_controller, gaugeControllerABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.gauge_controller, gaugeControllerABI),
         };
-        this.contracts[ALIASES.router.toLowerCase()] = {
-            contract: new Contract(ALIASES.router, routerABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.router, routerABI),
-        };
-
-        this.contracts[ALIASES.deposit_and_stake] = {
-            contract: new Contract(ALIASES.deposit_and_stake, depositAndStakeABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.deposit_and_stake, depositAndStakeABI),
-        };
-        this.contracts[ALIASES.deposit_and_stake.toLowerCase()] = {
-            contract: new Contract(ALIASES.deposit_and_stake, depositAndStakeABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.deposit_and_stake, depositAndStakeABI),
+        this.contracts[this.constants.ALIASES.gauge_controller.toLowerCase()] = {
+            contract: new Contract(this.constants.ALIASES.gauge_controller, gaugeControllerABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.gauge_controller, gaugeControllerABI),
         };
 
-        this.contracts[ALIASES.factory] = {
-            contract: new Contract(ALIASES.factory, factoryABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.factory, factoryABI),
+        this.contracts[this.constants.ALIASES.router] = {
+            contract: new Contract(this.constants.ALIASES.router, routerABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.router, routerABI),
         };
-        this.contracts[ALIASES.factory.toLowerCase()] = {
-            contract: new Contract(ALIASES.factory, factoryABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.factory, factoryABI),
-        };
-
-        this.contracts[ALIASES.crypto_factory] = {
-            contract: new Contract(ALIASES.crypto_factory, cryptoFactoryABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.crypto_factory, cryptoFactoryABI),
-        };
-        this.contracts[ALIASES.crypto_factory.toLowerCase()] = {
-            contract: new Contract(ALIASES.crypto_factory, cryptoFactoryABI, this.signer || this.provider),
-            multicallContract: new MulticallContract(ALIASES.crypto_factory, cryptoFactoryABI),
+        this.contracts[this.constants.ALIASES.router.toLowerCase()] = {
+            contract: new Contract(this.constants.ALIASES.router, routerABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.router, routerABI),
         };
 
-        this.constants = {
-            ALIASES,
-            POOLS_DATA,
-            DECIMALS_LOWER_CASE,
-            LP_TOKENS,
-            GAUGES,
-            FACTORY_POOLS_DATA: [],
-            CRYPTO_FACTORY_POOLS_DATA: [],
+        this.contracts[this.constants.ALIASES.deposit_and_stake] = {
+            contract: new Contract(this.constants.ALIASES.deposit_and_stake, depositAndStakeABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.deposit_and_stake, depositAndStakeABI),
+        };
+        this.contracts[this.constants.ALIASES.deposit_and_stake.toLowerCase()] = {
+            contract: new Contract(this.constants.ALIASES.deposit_and_stake, depositAndStakeABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.deposit_and_stake, depositAndStakeABI),
+        };
+
+        this.contracts[this.constants.ALIASES.factory] = {
+            contract: new Contract(this.constants.ALIASES.factory, factoryABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.factory, factoryABI),
+        };
+        this.contracts[this.constants.ALIASES.factory.toLowerCase()] = {
+            contract: new Contract(this.constants.ALIASES.factory, factoryABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.factory, factoryABI),
+        };
+
+        this.contracts[this.constants.ALIASES.crypto_factory] = {
+            contract: new Contract(this.constants.ALIASES.crypto_factory, cryptoFactoryABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.crypto_factory, cryptoFactoryABI),
+        };
+        this.contracts[this.constants.ALIASES.crypto_factory.toLowerCase()] = {
+            contract: new Contract(this.constants.ALIASES.crypto_factory, cryptoFactoryABI, this.signer || this.provider),
+            multicallContract: new MulticallContract(this.constants.ALIASES.crypto_factory, cryptoFactoryABI),
+        };
+    }
+
+    setContract(address: string, abi: any): void {
+        this.contracts[address] = {
+            contract: new Contract(address, abi, this.signer || this.provider),
+            multicallContract: new MulticallContract(address, abi),
         }
     }
 
     async fetchFactoryPools(useApi = true): Promise<void> {
+        if (this.chainId === 1313161554) return;
+
         if (useApi) {
-            this.constants.FACTORY_POOLS_DATA = await getFactoryPoolsDataFromApi.call(this, false);
+            this.constants.FACTORY_POOLS_DATA = lowerCasePoolDataAddresses(await getFactoryPoolsDataFromApi.call(this, false));
         } else {
-            this.constants.FACTORY_POOLS_DATA = await getFactoryPoolData.call(this);
+            this.constants.FACTORY_POOLS_DATA = lowerCasePoolDataAddresses(await getFactoryPoolData.call(this));
         }
+        this.constants.DECIMALS = { ...this.constants.DECIMALS, ...extractDecimals(this.constants.FACTORY_POOLS_DATA) };
+        this.constants.GAUGES = [ ...this.constants.GAUGES, ...extractGauges(this.constants.FACTORY_POOLS_DATA) ];
     }
 
     async fetchCryptoFactoryPools(useApi = true): Promise<void> {
-        if (this.chainId !== 1 && this.chainId !== 1337) return
+        if (![1, 137, 250].includes(this.chainId)) return;
 
         if (useApi) {
-            this.constants.CRYPTO_FACTORY_POOLS_DATA = await getFactoryPoolsDataFromApi.call(this, true);
+            this.constants.CRYPTO_FACTORY_POOLS_DATA = lowerCasePoolDataAddresses(await getFactoryPoolsDataFromApi.call(this, true));
         } else {
-            this.constants.CRYPTO_FACTORY_POOLS_DATA = await getCryptoFactoryPoolData.call(this);
+            this.constants.CRYPTO_FACTORY_POOLS_DATA = lowerCasePoolDataAddresses(await getCryptoFactoryPoolData.call(this));
         }
+        this.constants.DECIMALS = { ...this.constants.DECIMALS, ...extractDecimals(this.constants.CRYPTO_FACTORY_POOLS_DATA) };
+        this.constants.GAUGES = [ ...this.constants.GAUGES, ...extractGauges(this.constants.CRYPTO_FACTORY_POOLS_DATA) ];
     }
 
     setCustomFeeData(customFeeData: { gasPrice?: number, maxFeePerGas?: number, maxPriorityFeePerGas?: number }): void {

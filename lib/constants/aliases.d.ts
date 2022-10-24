@@ -1,24 +1,10 @@
-export declare const ALIASES_ETHEREUM: {
-    crv: string;
-    minter: string;
-    voting_escrow: string;
-    gauge_controller: string;
-    address_provider: string;
-    router: string;
-    deposit_and_stake: string;
-    factory: string;
-    crypto_factory: string;
-    registry_exchange: string;
-};
-export declare const ALIASES_POLYGON: {
-    crv: string;
-    minter: string;
-    voting_escrow: string;
-    gauge_controller: string;
-    address_provider: string;
-    router: string;
-    deposit_and_stake: string;
-    factory: string;
-    crypto_factory: string;
-    registry_exchange: string;
-};
+export declare const ALIASES_ETHEREUM: import("../interfaces").IDict<string>;
+export declare const ALIASES_POLYGON: import("../interfaces").IDict<string>;
+export declare const ALIASES_FANTOM: import("../interfaces").IDict<string>;
+export declare const ALIASES_AVALANCHE: import("../interfaces").IDict<string>;
+export declare const ALIASES_ARBITRUM: import("../interfaces").IDict<string>;
+export declare const ALIASES_OPTIMISM: import("../interfaces").IDict<string>;
+export declare const ALIASES_XDAI: import("../interfaces").IDict<string>;
+export declare const ALIASES_MOONBEAM: import("../interfaces").IDict<string>;
+export declare const ALIASES_AURORA: import("../interfaces").IDict<string>;
+export declare const ALIASES_KAVA: import("../interfaces").IDict<string>;

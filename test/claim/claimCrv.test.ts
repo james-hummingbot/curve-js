@@ -22,6 +22,8 @@ const ETHEREUM_POOLS = [...PLAIN_POOLS, ...LENDING_POOLS, ...META_POOLS, ...CRYP
 
 const POLYGON_POOLS = ['aave', 'ren', 'atricrypto3', 'eurtusd'];
 
+const ARBITRUM_POOLS = ['2pool', 'tricrypto', 'ren', 'eursusd'];
+
 
 describe('Claiming CRV', function() {
     this.timeout(120000);
@@ -30,15 +32,15 @@ describe('Claiming CRV', function() {
         await curve.init('JsonRpc', {}, { gasPrice: 0 });
     });
 
-    for (const poolName of CRYPTO_POOLS) {
+    for (const poolName of ARBITRUM_POOLS) {
         it(`Claims CRV from ${poolName.toUpperCase()}`, async function () {
-            const pool = new curve.Pool(poolName);
+            const pool = curve.getPool(poolName);
 
             const [crvBalanceBefore] = await curve.getBalances(['crv']) as string[];
-            const expected = await pool.gaugeClaimableTokens();
+            const expected = await pool.claimableCrv();
 
             console.log(crvBalanceBefore, "+", expected, "=", Number(crvBalanceBefore) + Number(expected));
-            await pool.gaugeClaimTokens();
+            await pool.claimCrv();
 
             const [crvBalanceAfter] = await curve.getBalances(['crv']) as string[];
             console.log(crvBalanceAfter);
